@@ -2,6 +2,7 @@ plugins {
     id 'com.android.application'
     id 'kotlin-android'
     id 'kotlin-kapt'
+    id 'dagger.hilt.android.plugin'
 }
 
 android {
@@ -17,7 +18,8 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
-        buildConfigField("String", "BASE_URL", "\"https://https://www.eventbriteapi.com/v3/\"")
+        buildConfigField("String", "BASE_URL", "\"https://www.eventbriteapi.com/v3/\"")
+        buildConfigField("String", "API_TOKEN", "\"RXIYXO57JC2TCLLGTWD3\"")
     }
 
     buildTypes {
@@ -48,6 +50,7 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.2.0'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0'
+    implementation "androidx.fragment:fragment-ktx:1.2.5"
 
     // dagger
     api 'com.google.dagger:dagger:2.28.3'
