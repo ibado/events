@@ -2,44 +2,44 @@ package bado.ignacio.events.presentation.main
 
 import android.os.Bundle
 import android.util.Log
-import android.view.*
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.*
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import bado.ignacio.events.R
 import bado.ignacio.events.databinding.MainFragmentBinding
 import bado.ignacio.events.presentation.State
+import bado.ignacio.events.presentation.detail.DetailFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MainFragment : Fragment() {
+class MainFragment : Fragment(R.layout.main_fragment) {
 
     companion object {
         fun newInstance() = MainFragment()
         val TAG = MainFragment::class.simpleName
     }
 
-    private val viewModel: MainViewModel by viewModels()
+    private val viewModel: MainViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View = MainFragmentBinding.inflate(inflater, container, false).root
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         val binding = MainFragmentBinding.bind(view)
-        val adapter = EventAdapter()
+        val adapter = EventAdapter { event ->
+            viewModel.selectedEvent = event
+            addDetailFragment()
+        }
         binding.rvMain.apply {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
             addItemDecoration(DividerItemDecoration(context, LinearLayoutManager.VERTICAL))
@@ -73,6 +73,19 @@ class MainFragment : Fragment() {
             else -> return super.onOptionsItemSelected(item)
         }
         return true
+    }
+
+    private fun addDetailFragment() {
+        parentFragmentManager.commit {
+            setCustomAnimations(
+                android.R.anim.slide_in_left,
+                android.R.anim.slide_out_right,
+                R.anim.slide_out_left,
+                R.anim.slide_in_right,
+            )
+            add(R.id.container, DetailFragment())
+            addToBackStack(null)
+        }
     }
 
     private fun showError(error: Throwable) {

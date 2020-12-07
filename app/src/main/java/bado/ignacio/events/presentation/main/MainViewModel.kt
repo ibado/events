@@ -13,6 +13,7 @@ import bado.ignacio.events.presentation.State
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.threeten.bp.LocalDateTime
 
 class MainViewModel @ViewModelInject constructor(
     private val getMyEventsUseCase: GetMyEventsUseCase,
@@ -23,6 +24,8 @@ class MainViewModel @ViewModelInject constructor(
 
     private var orderBy: OrderBy = OrderBy.BY_NAME
     private var query: String = ""
+
+    var selectedEvent: Event = emptyEvent()
 
     init {
         fetchEvents()
@@ -58,6 +61,15 @@ class MainViewModel @ViewModelInject constructor(
         this.query = query
         fetchEvents()
     }
+
+    private fun emptyEvent() = Event(
+        "name",
+        LocalDateTime.now(),
+        LocalDateTime.now(),
+        null,
+        false,
+        "currency"
+    )
 
     companion object {
         val TAG = MainViewModel::class.simpleName

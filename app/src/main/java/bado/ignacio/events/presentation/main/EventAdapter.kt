@@ -8,11 +8,17 @@ import bado.ignacio.events.domain.Event
 
 class EventAdapter(
     private var events: List<Event> = emptyList(),
+    private val onItemClick: (Event) -> Unit,
 ) : RecyclerView.Adapter<EventAdapter.EventViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = EventViewHolder(
         EventItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-    )
+    ).apply {
+        itemView.setOnClickListener {
+            val event = events[adapterPosition]
+            onItemClick(event)
+        }
+    }
 
     override fun onBindViewHolder(holder: EventViewHolder, position: Int) {
         holder.bind(events[position])
