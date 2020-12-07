@@ -11,6 +11,7 @@ import androidx.fragment.app.activityViewModels
 import bado.ignacio.events.R
 import bado.ignacio.events.databinding.FragmentDetailBinding
 import bado.ignacio.events.presentation.main.MainViewModel
+import bado.ignacio.events.pretty
 
 class DetailFragment : Fragment(R.layout.fragment_detail) {
 
@@ -20,7 +21,6 @@ class DetailFragment : Fragment(R.layout.fragment_detail) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
         (activity as? AppCompatActivity)?.supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -30,10 +30,16 @@ class DetailFragment : Fragment(R.layout.fragment_detail) {
         with(binding) {
             val event = viewModel.selectedEvent
             tvName.text = event.name
-            tvDescription.text = event.description ?: "No description"
-            tvStartDate.text = event.startDate.toString()
-            tvEndDate.text = event.endDate.toString()
-            tvIsFree.text = if (event.isFree) "Free event" else "Non free (${event.currency})"
+            tvDescription.text = event.description ?: getString(R.string.no_description_label)
+            tvStartDate.text = getString(R.string.start_date_template, event.startDate.pretty())
+            tvEndDate.text = getString(R.string.end_date_template, event.endDate.pretty())
+            if (event.isFree) {
+                tvIsFree.text = getString(R.string.free_event)
+                tvCurrency.text = ""
+            } else {
+                tvIsFree.text = getString(R.string.non_free_event)
+                tvCurrency.text = getString(R.string.currency_template, event.currency)
+            }
         }
     }
 

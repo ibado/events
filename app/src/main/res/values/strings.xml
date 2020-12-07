@@ -5,4 +5,10 @@
     <string name="order_by_date">Order by date</string>
     <string name="event_loading_error">Error loading events</string>
     <string name="search_title">Search by name</string>
+    <string name="no_description_label">No description</string>
+    <string name="free_event">Free event</string>
+    <string name="non_free_event">Non free event</string>
+    <string name="currency_template">Currency: %s</string>
+    <string name="start_date_template">Star date: %s</string>
+    <string name="end_date_template">End date: %s</string>
 </resources>

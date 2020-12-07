@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import bado.ignacio.events.databinding.EventItemBinding
 import bado.ignacio.events.domain.Event
+import bado.ignacio.events.pretty
 
 class EventAdapter(
     private var events: List<Event> = emptyList(),
@@ -38,7 +39,7 @@ class EventAdapter(
 
         fun bind(event: Event) {
             binding.tvTitle.text = event.name
-            binding.tvStartDate.text = event.startDate.toString()
+            binding.tvStartDate.text = event.startDate.pretty()
         }
     }
 }
