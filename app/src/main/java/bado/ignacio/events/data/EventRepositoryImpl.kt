@@ -11,9 +11,10 @@ class EventRepositoryImpl @Inject constructor(
     private val service: MyEventsService,
 ) : EventRepository {
 
-    override fun getMyEvents(orderBy: OrderBy): List<Event> {
+    override fun getMyEvents(query: String, orderBy: OrderBy): List<Event> {
         val order = if (orderBy == OrderBy.BY_START_DATE) "start_asc" else "name_asc"
-        return service.fetchEvents(order).execute().body()?.events?.map {
+        val call = service.fetchEvents(query, order)
+        return call.execute().body()?.events?.map {
             Event(
                 name = it.name.text,
                 startDate = it.start.local.toDate(),

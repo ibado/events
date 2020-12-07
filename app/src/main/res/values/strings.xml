@@ -4,4 +4,5 @@
     <string name="order_by_name">Order by name</string>
     <string name="order_by_date">Order by date</string>
     <string name="event_loading_error">Error loading events</string>
+    <string name="search_title">Search by name</string>
 </resources>

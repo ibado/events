@@ -21,16 +21,19 @@ class MainViewModel @ViewModelInject constructor(
     private val _events: MutableLiveData<State<List<Event>>> = MutableLiveData()
     val events: LiveData<State<List<Event>>> = _events
 
+    private var orderBy: OrderBy = OrderBy.BY_NAME
+    private var query: String = ""
+
     init {
         fetchEvents()
     }
 
-    private fun fetchEvents(orderBy: OrderBy = OrderBy.BY_NAME) {
+    private fun fetchEvents() {
         viewModelScope.launch {
             try {
                 _events.value = State.Loading
                 val eventList = withContext(Dispatchers.IO) {
-                    getMyEventsUseCase.invoke(orderBy)
+                    getMyEventsUseCase.invoke(GetMyEventsUseCase.Params(query, orderBy))
                 }
                 Log.d(TAG, "response: $eventList")
                 _events.value = State.Success(eventList)
@@ -42,11 +45,18 @@ class MainViewModel @ViewModelInject constructor(
     }
 
     fun orderByName() {
-        fetchEvents(OrderBy.BY_NAME)
+        orderBy = OrderBy.BY_NAME
+        fetchEvents()
     }
 
     fun orderByDate() {
-        fetchEvents(OrderBy.BY_START_DATE)
+        orderBy = OrderBy.BY_START_DATE
+        fetchEvents()
+    }
+
+    fun search(query: String) {
+        this.query = query
+        fetchEvents()
     }
 
     companion object {

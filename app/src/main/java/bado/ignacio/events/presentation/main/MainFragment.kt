@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.widget.Toast
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -56,6 +57,12 @@ class MainFragment : Fragment() {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_main, menu)
+
+        val search = menu.findItem(R.id.search_action).actionView as SearchView
+        search.setQuery("", false)
+        search.setOnQueryTextListener(EventQueryTextListener {
+            viewModel.search(it)
+        })
         super.onCreateOptionsMenu(menu, inflater)
     }
 

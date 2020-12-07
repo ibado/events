@@ -7,5 +7,8 @@ import retrofit2.http.Query
 interface MyEventsService {
 
     @GET("users/me/events")
-    fun fetchEvents(@Query("order_by") orderBy: String = "start_asc"): Call<MyEventsResponse>
+    fun fetchEvents(
+        @Query("name_filter") nameFilter: String,
+        @Query("order_by") orderBy: String,
+    ): Call<MyEventsResponse>
 }
