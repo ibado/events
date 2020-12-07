@@ -4,7 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.fragment.app.commitNow
 import bado.ignacio.events.databinding.MainActivityBinding
-import bado.ignacio.events.ui.main.MainFragment
+import bado.ignacio.events.presentation.main.MainFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

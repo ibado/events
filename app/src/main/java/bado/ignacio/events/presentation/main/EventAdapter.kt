@@ -1,8 +1,7 @@
-package bado.ignacio.events.ui.main
+package bado.ignacio.events.presentation.main
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import bado.ignacio.events.databinding.EventItemBinding
 import bado.ignacio.events.domain.Event

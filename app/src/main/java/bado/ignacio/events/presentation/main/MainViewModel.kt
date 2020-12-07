@@ -1,4 +1,4 @@
-package bado.ignacio.events.ui.main
+package bado.ignacio.events.presentation.main
 
 import android.util.Log
 import androidx.hilt.lifecycle.ViewModelInject
@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import bado.ignacio.events.domain.Event
 import bado.ignacio.events.domain.GetMyEventsUseCase
 import bado.ignacio.events.domain.EventRepository.OrderBy
+import bado.ignacio.events.presentation.State
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -17,8 +18,8 @@ class MainViewModel @ViewModelInject constructor(
     private val getMyEventsUseCase: GetMyEventsUseCase,
 ) : ViewModel() {
 
-    private val _events: MutableLiveData<List<Event>> = MutableLiveData()
-    val events: LiveData<List<Event>> = _events
+    private val _events: MutableLiveData<State<List<Event>>> = MutableLiveData()
+    val events: LiveData<State<List<Event>>> = _events
 
     init {
         fetchEvents()
@@ -27,13 +28,15 @@ class MainViewModel @ViewModelInject constructor(
     private fun fetchEvents(orderBy: OrderBy = OrderBy.BY_NAME) {
         viewModelScope.launch {
             try {
+                _events.value = State.Loading
                 val eventList = withContext(Dispatchers.IO) {
                     getMyEventsUseCase.invoke(orderBy)
                 }
                 Log.d(TAG, "response: $eventList")
-                _events.value = eventList
+                _events.value = State.Success(eventList)
             } catch (exception: Throwable) {
                 Log.d(TAG, "error: ${exception.message}")
+                _events.value = State.Error(exception)
             }
         }
     }

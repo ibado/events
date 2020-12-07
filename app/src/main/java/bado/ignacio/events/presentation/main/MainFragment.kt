@@ -1,13 +1,16 @@
-package bado.ignacio.events.ui.main
+package bado.ignacio.events.presentation.main
 
 import android.os.Bundle
+import android.util.Log
 import android.view.*
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import bado.ignacio.events.R
 import bado.ignacio.events.databinding.MainFragmentBinding
+import bado.ignacio.events.presentation.State
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -15,6 +18,7 @@ class MainFragment : Fragment() {
 
     companion object {
         fun newInstance() = MainFragment()
+        val TAG = MainFragment::class.simpleName
     }
 
     private val viewModel: MainViewModel by viewModels()
@@ -41,7 +45,12 @@ class MainFragment : Fragment() {
             this.adapter = adapter
         }
         viewModel.events.observe(viewLifecycleOwner) {
-            adapter.updateEvents(it)
+            binding.loading.visibility = View.GONE
+            when (it) {
+                is State.Success -> adapter.updateEvents(it.value)
+                is State.Error -> showError(it.error)
+                is State.Loading -> binding.loading.visibility = View.VISIBLE
+            }
         }
     }
 
@@ -57,5 +66,10 @@ class MainFragment : Fragment() {
             else -> return super.onOptionsItemSelected(item)
         }
         return true
+    }
+
+    private fun showError(error: Throwable) {
+        Toast.makeText(context, getString(R.string.event_loading_error), Toast.LENGTH_SHORT).show()
+        Log.e(TAG, "Error fetching events. Error: $error")
     }
 }
