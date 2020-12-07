@@ -1,5 +1,5 @@
 package bado.ignacio.events.domain
 
-interface UseCase<T> {
-    fun invoke(): T
+interface UseCase<T, P> {
+    fun invoke(params: P): T
 }

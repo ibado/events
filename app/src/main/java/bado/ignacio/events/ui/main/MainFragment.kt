@@ -1,13 +1,12 @@
 package bado.ignacio.events.ui.main
 
 import android.os.Bundle
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import bado.ignacio.events.R
 import bado.ignacio.events.databinding.MainFragmentBinding
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -19,6 +18,11 @@ class MainFragment : Fragment() {
     }
 
     private val viewModel: MainViewModel by viewModels()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -39,5 +43,19 @@ class MainFragment : Fragment() {
         viewModel.events.observe(viewLifecycleOwner) {
             adapter.updateEvents(it)
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_main, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.order_by_name -> viewModel.orderByName()
+            R.id.order_by_date -> viewModel.orderByDate()
+            else -> return super.onOptionsItemSelected(item)
+        }
+        return true
     }
 }

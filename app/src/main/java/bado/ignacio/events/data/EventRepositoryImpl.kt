@@ -2,6 +2,7 @@ package bado.ignacio.events.data
 
 import bado.ignacio.events.domain.Event
 import bado.ignacio.events.domain.EventRepository
+import bado.ignacio.events.domain.EventRepository.*
 import bado.ignacio.events.toDate
 import java.lang.RuntimeException
 import javax.inject.Inject
@@ -10,8 +11,9 @@ class EventRepositoryImpl @Inject constructor(
     private val service: MyEventsService,
 ) : EventRepository {
 
-    override fun getMyEvents(): List<Event> {
-        return service.fetchEvents().execute().body()?.events?.map {
+    override fun getMyEvents(orderBy: OrderBy): List<Event> {
+        val order = if (orderBy == OrderBy.BY_START_DATE) "start_asc" else "name_asc"
+        return service.fetchEvents(order).execute().body()?.events?.map {
             Event(
                 name = it.name.text,
                 startDate = it.start.local.toDate(),

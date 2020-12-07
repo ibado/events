@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import bado.ignacio.events.domain.Event
 import bado.ignacio.events.domain.GetMyEventsUseCase
+import bado.ignacio.events.domain.EventRepository.OrderBy
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -23,11 +24,11 @@ class MainViewModel @ViewModelInject constructor(
         fetchEvents()
     }
 
-    fun fetchEvents() {
+    private fun fetchEvents(orderBy: OrderBy = OrderBy.BY_NAME) {
         viewModelScope.launch {
             try {
                 val eventList = withContext(Dispatchers.IO) {
-                    getMyEventsUseCase.invoke()
+                    getMyEventsUseCase.invoke(orderBy)
                 }
                 Log.d(TAG, "response: $eventList")
                 _events.value = eventList
@@ -35,6 +36,14 @@ class MainViewModel @ViewModelInject constructor(
                 Log.d(TAG, "error: ${exception.message}")
             }
         }
+    }
+
+    fun orderByName() {
+        fetchEvents(OrderBy.BY_NAME)
+    }
+
+    fun orderByDate() {
+        fetchEvents(OrderBy.BY_START_DATE)
     }
 
     companion object {
