@@ -11,6 +11,7 @@ import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.*
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import bado.ignacio.events.R
 import bado.ignacio.events.databinding.MainFragmentBinding
 import bado.ignacio.events.presentation.State
@@ -44,6 +45,16 @@ class MainFragment : Fragment(R.layout.main_fragment) {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
             addItemDecoration(DividerItemDecoration(context, LinearLayoutManager.VERTICAL))
             this.adapter = adapter
+            addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    super.onScrolled(recyclerView, dx, dy)
+                    if (!recyclerView.canScrollVertically(1) && viewModel.loadMore) {
+                        adapter.showLoadingItem()
+                        recyclerView.scrollToPosition(adapter.itemCount - 1)
+                        viewModel.loadMore()
+                    }
+                }
+            })
         }
         viewModel.events.observe(viewLifecycleOwner) {
             binding.loading.visibility = View.GONE
@@ -68,8 +79,8 @@ class MainFragment : Fragment(R.layout.main_fragment) {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.order_by_name -> viewModel.orderByName()
-            R.id.order_by_date -> viewModel.orderByDate()
+            R.id.order_by_name -> viewModel.sortByName()
+            R.id.order_by_date -> viewModel.sortByDate()
             else -> return super.onOptionsItemSelected(item)
         }
         return true

@@ -9,4 +9,15 @@ data class Event(
     val description: String?,
     val isFree: Boolean,
     val currency: String,
-)
+) {
+    companion object {
+        fun empty() = Event(
+            "name",
+            LocalDateTime.now(),
+            LocalDateTime.now(),
+            null,
+            false,
+            "currency"
+        )
+    }
+}

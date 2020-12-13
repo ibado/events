@@ -27,4 +27,22 @@
         app:layout_constraintStart_toEndOf="@+id/tv_title"
         app:layout_constraintEnd_toEndOf="parent" />
 
+    <FrameLayout
+        android:id="@+id/loading"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/white"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" >
+
+        <ProgressBar
+            android:id="@+id/progress"
+            android:layout_width="@dimen/loading_size"
+            android:layout_height="@dimen/loading_size"
+            android:layout_gravity="center"
+            android:indeterminate="true" />
+
+    </FrameLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

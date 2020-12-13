@@ -5,12 +5,16 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import bado.ignacio.events.databinding.EventItemBinding
 import bado.ignacio.events.domain.Event
+import bado.ignacio.events.hide
 import bado.ignacio.events.pretty
+import bado.ignacio.events.show
 
 class EventAdapter(
-    private var events: List<Event> = emptyList(),
+    private var events: MutableList<Event> = mutableListOf(),
     private val onItemClick: (Event) -> Unit,
 ) : RecyclerView.Adapter<EventAdapter.EventViewHolder>() {
+
+    private val loading = Event.empty().copy(name = LOADING)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = EventViewHolder(
         EventItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -29,8 +33,18 @@ class EventAdapter(
 
     fun updateEvents(items: List<Event>) {
         // ToDo: implement DiffCallback
-        events = items
+        if (!events.contains(loading)) {
+            events.clear()
+        } else {
+            events.remove(loading)
+        }
+        events.addAll(items)
         notifyDataSetChanged()
+    }
+
+    fun showLoadingItem() {
+        events.add(loading)
+        notifyItemInserted(events.size - 1)
     }
 
     class EventViewHolder(
@@ -38,8 +52,15 @@ class EventAdapter(
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(event: Event) {
-            binding.tvTitle.text = event.name
-            binding.tvStartDate.text = event.startDate.pretty()
+            with(binding) {
+                if (event.name == LOADING) loading.show() else loading.hide()
+                tvTitle.text = event.name
+                tvStartDate.text = event.startDate.pretty()
+            }
         }
+    }
+
+    companion object {
+        const val LOADING = "loading_key"
     }
 }

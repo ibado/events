@@ -1,10 +1,11 @@
 package bado.ignacio.events.domain
 
+import bado.ignacio.events.domain.EventRepository.*
 import javax.inject.Inject
 
 class GetMyEventsUseCase @Inject constructor(
     private val repository: EventRepository,
-) : UseCase<List<Event>, GetMyEventsUseCase.Params> {
+) : UseCase<Events, GetMyEventsUseCase.Params> {
 
     override fun invoke(params: Params) = repository.getMyEvents(
         params.query,
@@ -14,7 +15,7 @@ class GetMyEventsUseCase @Inject constructor(
 
     class Params(
         val query: String,
-        val orderBy: EventRepository.OrderBy,
+        val orderBy: OrderBy,
         val page: Int,
     )
 }

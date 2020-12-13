@@ -1,5 +1,6 @@
 package bado.ignacio.events
 
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import org.threeten.bp.LocalDateTime
@@ -15,6 +16,21 @@ fun LocalDateTime.pretty(): String {
     return "$monthPretty $dayOfMonth, $year"
 }
 
+/**
+ * Turn the first character to uppercase
+ */
+fun String.firstToUpper(): String {
+    return Character.toUpperCase(this[0]) + this.substring(1)
+}
+
 fun Fragment.displayHomeAsUp() {
     (activity as? AppCompatActivity)?.supportActionBar?.setDisplayHomeAsUpEnabled(true)
+}
+
+fun View.show() {
+    this.visibility = View.VISIBLE
+}
+
+fun View.hide() {
+    this.visibility = View.GONE
 }

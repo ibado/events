@@ -13,7 +13,6 @@ import bado.ignacio.events.presentation.State
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.threeten.bp.LocalDateTime
 
 class MainViewModel @ViewModelInject constructor(
     private val getMyEventsUseCase: GetMyEventsUseCase,
@@ -22,54 +21,69 @@ class MainViewModel @ViewModelInject constructor(
     private val _events: MutableLiveData<State<List<Event>>> = MutableLiveData()
     val events: LiveData<State<List<Event>>> = _events
 
+    var selectedEvent: Event = Event.empty()
+    var loadMore = true
+
     private var orderBy: OrderBy = OrderBy.BY_NAME
     private var query: String = ""
-
-    var selectedEvent: Event = emptyEvent()
+    private var page = 1
+    private var current: List<Event>? = null
 
     init {
+        _events.value = State.Loading
         fetchEvents()
+    }
+
+    fun sortByName() {
+        orderBy = OrderBy.BY_NAME
+        sort(compareBy { it.name })
+    }
+
+    fun sortByDate() {
+        orderBy = OrderBy.BY_START_DATE
+        sort(compareBy { it.startDate })
+    }
+
+    fun search(query: String) {
+        page = 1
+        this.query = query
+        _events.value = State.Loading
+        fetchEvents()
+    }
+
+    fun loadMore() {
+        if (loadMore) {
+            page++
+            fetchEvents()
+            loadMore = false
+        }
+    }
+
+    private fun sort(comparator: Comparator<Event>) {
+        _events.value = State.Loading
+        current?.sortedWith(comparator)?.apply {
+            _events.value = State.Success(this)
+        }
     }
 
     private fun fetchEvents() {
         viewModelScope.launch {
             try {
-                _events.value = State.Loading
-                val eventList = withContext(Dispatchers.IO) {
-                    getMyEventsUseCase.invoke(GetMyEventsUseCase.Params(query, orderBy, 1))
+                val result = withContext(Dispatchers.IO) {
+                    getMyEventsUseCase.invoke(GetMyEventsUseCase.Params(query, orderBy, page))
                 }
-                Log.d(TAG, "response: $eventList")
-                _events.value = State.Success(eventList)
+                loadMore = result.morePages
+                val items = result.events
+
+                current = if (page > 1) current?.plus(items) else items
+
+                _events.value = State.Success(items)
             } catch (exception: Throwable) {
                 Log.d(TAG, "error: ${exception.message}")
                 _events.value = State.Error(exception)
             }
         }
     }
-
-    fun orderByName() {
-        orderBy = OrderBy.BY_NAME
-        fetchEvents()
-    }
-
-    fun orderByDate() {
-        orderBy = OrderBy.BY_START_DATE
-        fetchEvents()
-    }
-
-    fun search(query: String) {
-        this.query = query
-        fetchEvents()
-    }
-
-    private fun emptyEvent() = Event(
-        "name",
-        LocalDateTime.now(),
-        LocalDateTime.now(),
-        null,
-        false,
-        "currency"
-    )
 
     companion object {
         val TAG = MainViewModel::class.simpleName
