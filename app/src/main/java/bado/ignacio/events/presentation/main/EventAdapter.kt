@@ -5,9 +5,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import bado.ignacio.events.databinding.EventItemBinding
 import bado.ignacio.events.domain.Event
-import bado.ignacio.events.hide
-import bado.ignacio.events.pretty
-import bado.ignacio.events.show
+import bado.ignacio.events.presentation.hide
+import bado.ignacio.events.presentation.pretty
+import bado.ignacio.events.presentation.show
 
 class EventAdapter(
     private var events: MutableList<Event> = mutableListOf(),

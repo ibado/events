@@ -3,8 +3,8 @@ package bado.ignacio.events.data
 import bado.ignacio.events.domain.Event
 import bado.ignacio.events.domain.EventRepository
 import bado.ignacio.events.domain.EventRepository.*
-import bado.ignacio.events.firstToUpper
-import bado.ignacio.events.toDate
+import bado.ignacio.events.presentation.firstToUpper
+import bado.ignacio.events.presentation.toDate
 import java.lang.RuntimeException
 import javax.inject.Inject
 

@@ -9,9 +9,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import bado.ignacio.events.R
 import bado.ignacio.events.databinding.FragmentDetailBinding
-import bado.ignacio.events.displayHomeAsUp
+import bado.ignacio.events.presentation.displayHomeAsUp
 import bado.ignacio.events.presentation.main.MainViewModel
-import bado.ignacio.events.pretty
+import bado.ignacio.events.presentation.pretty
 
 class DetailFragment : Fragment(R.layout.fragment_detail) {
 

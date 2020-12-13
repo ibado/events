@@ -1,4 +1,4 @@
-package bado.ignacio.events
+package bado.ignacio.events.presentation
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
