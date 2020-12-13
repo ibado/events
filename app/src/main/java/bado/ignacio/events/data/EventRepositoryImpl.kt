@@ -11,10 +11,19 @@ class EventRepositoryImpl @Inject constructor(
     private val service: MyEventsService,
 ) : EventRepository {
 
-    override fun getMyEvents(query: String, orderBy: OrderBy): List<Event> {
+    private var pageCount: Int? = null
+
+    override fun getMyEvents(query: String, orderBy: OrderBy, page: Int): List<Event> {
         val order = if (orderBy == OrderBy.BY_START_DATE) "start_asc" else "name_asc"
-        val call = service.fetchEvents(query, order)
-        return call.execute().body()?.events?.map {
+
+        pageCount?.let {
+            if (it < page) return emptyList()
+        }
+
+        val call = service.fetchEvents(query, order, page).execute()
+        val response = call.body()
+        pageCount = response?.pagination?.pageCount
+        return response?.events?.map {
             Event(
                 name = it.name.text,
                 startDate = it.start.local.toDate(),
@@ -23,6 +32,6 @@ class EventRepositoryImpl @Inject constructor(
                 isFree = it.isFree,
                 currency = it.currency,
             )
-        } ?: throw RuntimeException("Error fetching events")
+        } ?: throw RuntimeException("Error fetching events. HTTP error: ${call.code()}")
     }
 }

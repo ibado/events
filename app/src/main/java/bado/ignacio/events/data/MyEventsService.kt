@@ -10,5 +10,6 @@ interface MyEventsService {
     fun fetchEvents(
         @Query("name_filter") nameFilter: String,
         @Query("order_by") orderBy: String,
+        @Query("page") continuation: Int,
     ): Call<MyEventsResponse>
 }

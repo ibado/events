@@ -5,11 +5,11 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import bado.ignacio.events.R
 import bado.ignacio.events.databinding.FragmentDetailBinding
+import bado.ignacio.events.displayHomeAsUp
 import bado.ignacio.events.presentation.main.MainViewModel
 import bado.ignacio.events.pretty
 
@@ -20,7 +20,7 @@ class DetailFragment : Fragment(R.layout.fragment_detail) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
-        (activity as? AppCompatActivity)?.supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        displayHomeAsUp()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

@@ -36,7 +36,7 @@ class MainViewModel @ViewModelInject constructor(
             try {
                 _events.value = State.Loading
                 val eventList = withContext(Dispatchers.IO) {
-                    getMyEventsUseCase.invoke(GetMyEventsUseCase.Params(query, orderBy))
+                    getMyEventsUseCase.invoke(GetMyEventsUseCase.Params(query, orderBy, 1))
                 }
                 Log.d(TAG, "response: $eventList")
                 _events.value = State.Success(eventList)
