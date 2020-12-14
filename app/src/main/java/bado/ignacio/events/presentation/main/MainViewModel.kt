@@ -70,7 +70,7 @@ class MainViewModel @ViewModelInject constructor(
         viewModelScope.launch {
             try {
                 val result = withContext(Dispatchers.IO) {
-                    getMyEventsUseCase.invoke(GetMyEventsUseCase.Params(query, orderBy, page))
+                    getMyEventsUseCase.execute(GetMyEventsUseCase.Params(query, orderBy, page))
                 }
                 loadMore = result.morePages
                 val items = result.events

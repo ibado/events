@@ -7,5 +7,5 @@ interface EventRepository {
         BY_NAME, BY_START_DATE
     }
 
-    class Events(val events: List<Event>, val morePages: Boolean)
+    data class Events(val events: List<Event>, val morePages: Boolean)
 }

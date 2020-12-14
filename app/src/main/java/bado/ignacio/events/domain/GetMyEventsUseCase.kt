@@ -7,7 +7,7 @@ class GetMyEventsUseCase @Inject constructor(
     private val repository: EventRepository,
 ) : UseCase<Events, GetMyEventsUseCase.Params> {
 
-    override fun invoke(params: Params) = repository.getMyEvents(
+    override fun execute(params: Params) = repository.getMyEvents(
         params.query,
         params.orderBy,
         params.page,
